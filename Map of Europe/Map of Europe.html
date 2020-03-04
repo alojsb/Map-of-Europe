@@ -60,8 +60,9 @@
         let copy = document.getElementById("copy-paste-window");
 
         // declaration of fundamental variables
-        let countryVertices;    // array of vertices of the active country being drawn (undefined at first)
-        let x, y;               // placeholders for click coordinates (undefined until clicked first)
+        let countryVertices;        // array of vertices of the active country being drawn (undefined at first)
+        let x, y;                   // placeholders for click coordinates (undefined until clicked first)
+        let selectionMade = false;  // this flag prevents multiple selections when clicking pixel belonging to more than one country
 
         // needs to execute this only after whole document is rendered
         window.onload = function () {
@@ -87,7 +88,16 @@
                 c.stroke();
 
                 // fill area of polygon
-                c.fillStyle = c.isPointInPath(x, y) ? "red" : "blue";
+                if (selectionMade) {    // if there is one country already selected, all other must be unselected
+                    c.fillStyle = "blue";
+                }
+                else {  // else do as usual
+                    c.fillStyle = c.isPointInPath(x, y) ? "red" : "blue";
+                    if (c.fillStyle === "#ff0000") {    // if (c.fillStyle === "red") doesn't work
+                    // flag doesn't allow for a duplicate selection later on
+                        selectionMade = true;
+                    }
+                }
                 c.fill();
             }
 
@@ -110,8 +120,11 @@
                 // draw borders of 'active country'
                 for(var i = 0; i < countryList.length; i++) {
 
+                    //if (i === 2)
                     drawBorders(countryList[i].countryVertices);
                 }
+                // reset flag to default value (false)
+                selectionMade = false;
             }
 
             // draw all countries for the first time
