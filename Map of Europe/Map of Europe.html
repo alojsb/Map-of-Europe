@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Map of Europe</title>
+
     <script src="countries.js"></script>
     <style>
 
@@ -48,108 +49,8 @@
         <!-- <div id="copy-paste-window" onfocus="this.select()"></div> -->
         <textarea name="abc" id="copy-paste-window" cols="30" rows="10" onfocus="this.select()"></textarea>
 
-
-    <script>
-
-        // canvas basic settings
-        let myCanvas = document.getElementById("myCanvas");
-        let c = myCanvas.getContext("2d");
-
-        // helper windows with information on click coordinates
-        let coords = document.getElementById("coords");
-        let copy = document.getElementById("copy-paste-window");
-
-        // declaration of fundamental variables
-        let countryVertices;        // array of vertices of the active country being drawn (undefined at first)
-        let x, y;                   // placeholders for click coordinates (undefined until clicked first)
-        let selectionMade = false;  // this flag prevents multiple selections when clicking pixel belonging to more than one country
-
-        // needs to execute this only after whole document is rendered
-        window.onload = function () {
-
-            // draw the whole border of a single country
-            function drawBorders(s) {
-
-                // start drawing polygon
-                c.beginPath();
-                c.moveTo(s[0].x, s[0].y);
-
-                for(var i = 1; i < s.length; i++){
-
-                    c.lineTo(s[i].x, s[i].y);
-                }
-
-                // close polygon
-                c.closePath();
-
-                // draw border between the two given vertices
-                c.strokeStyle = "lightblue";
-                c.lineWidth = 3;
-                c.stroke();
-
-                // fill area of polygon
-                if (selectionMade) {    // if there is one country already selected, all other must be unselected
-                    c.fillStyle = "blue";
-                }
-                else {  // else do as usual
-                    c.fillStyle = c.isPointInPath(x, y) ? "red" : "blue";
-                    if (c.fillStyle === "#ff0000") {    // if (c.fillStyle === "red") doesn't work
-                    // flag doesn't allow for a duplicate selection later on
-                        selectionMade = true;
-                    }
-                }
-                c.fill();
-            }
-
-            // draw borders of all countries
-            function drawAllCountries(e) {
-
-                // pinpoint user click coordinates (e is undefined before first click)
-                if (e) {
-                    x = e.clientX - 8;
-                    y = e.clientY - 8;
-                }
-
-                // clear the canvas
-                c.clearRect(0, 0, myCanvas.width, myCanvas.height);
-
-                // catch the background image
-                let euroMap = document.getElementById("euroMap");
-                c.drawImage(euroMap, 0, 0);
-                    
-                // draw borders of 'active country'
-                for(var i = 0; i < countryList.length; i++) {
-
-                    //if (i === 2)
-                    drawBorders(countryList[i].countryVertices);
-                }
-                // reset flag to default value (false)
-                selectionMade = false;
-            }
-
-            // draw all countries for the first time
-            drawAllCountries();
-            // draw again whenever we click (this can't be with the other event listeners because then 'drawAllCountries' is undefined)
-            myCanvas.addEventListener("click", drawAllCountries);
-        }
-
-
-        // event listeners (filling helper fields with coords)
-
-        myCanvas.addEventListener('mousemove', function (e) {
-
-            // coords.innerText = "c.lineTo(" + (e.clientX - 8) + ", " + (e.clientY - 8) + ");";
-            coords.innerText = "{x:" + (e.clientX - 8) + ", y:" + (e.clientY - 8) + "},";
-        });
-
-        myCanvas.addEventListener('click', function (e) {
-
-            // coords.innerText = "c.lineTo(" + (e.clientX - 8) + ", " + (e.clientY - 8) + ");";
-            copy.textContent += "{x:" + (e.clientX - 8) + ", y:" + (e.clientY - 8) + "},\n";
-        });
-
-    </script>
-    
+        <!-- This script tag has to be here (and not in the head tag) because the relevant html elements have to be loaded -->
+        <script src="main.js"></script>
 
 </body>
 </html>
