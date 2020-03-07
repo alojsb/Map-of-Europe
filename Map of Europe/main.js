@@ -9,43 +9,57 @@ let copy = document.getElementById("copy-paste-window");
 // declaration of fundamental variables
 let countryVertices;        // array of vertices of the active country being drawn (undefined at first)
 let x, y;                   // placeholders for click coordinates (undefined until clicked first)
-let selectionMade = false;  // this flag prevents multiple selections when clicking pixel belonging to more than one country
 
 // needs to execute this only after whole document is rendered
 window.onload = function () {
 
-    // draw the whole border of a single country
-    function drawBorders(s) {
+    // draw the whole border of a single country and color it blue
+    // return the index of country if it has been clicked on
+    function colorCountryBlue(s, index) {
 
         // start drawing polygon
         c.beginPath();
         c.moveTo(s[0].x, s[0].y);
 
-        for(var i = 1; i < s.length; i++){
-
+        for(var i = 1; i < s.length; i++)
             c.lineTo(s[i].x, s[i].y);
-        }
 
         // close polygon
         c.closePath();
 
-        // draw border between the two given vertices
+        // draw borders with these settings
         c.strokeStyle = "lightblue";
         c.lineWidth = 3;
         c.stroke();
 
-        // fill area of polygon
-        if (selectionMade) {    // if there is one country already selected, all other must be unselected
-            c.fillStyle = "blue";
-        }
-        else {  // else do as usual
-            // if click is inside polygon, fill it with red color, otherwise blue
-            c.fillStyle = c.isPointInPath(x, y) ? "red" : "blue";
-            if (c.fillStyle === "#ff0000") {    // if (c.fillStyle === "red") doesn't work
-            // flag doesn't allow for a duplicate selection later on
-                selectionMade = true;
-            }
-        }
+        // first color all countries blue
+        c.fillStyle = "blue";
+        c.fill();
+
+        // check and return index if country has been clicked on
+        return c.isPointInPath(x, y) ? index : -1;
+    }
+
+    // color country red
+    function colorCountryRed(s) {
+
+        // start drawing polygon
+        c.beginPath();
+        c.moveTo(s[0].x, s[0].y);
+
+        for(var i = 1; i < s.length; i++)
+            c.lineTo(s[i].x, s[i].y);
+
+        // close polygon
+        c.closePath();
+
+        // draw borders with these settings
+        c.strokeStyle = "lightblue";
+        c.lineWidth = 3;
+        c.stroke();
+
+        // color the polygon red
+        c.fillStyle = "red";
         c.fill();
     }
 
@@ -61,77 +75,77 @@ window.onload = function () {
         // clear the canvas
         c.clearRect(0, 0, myCanvas.width, myCanvas.height);
 
-        // catch the background image
-        let euroMap = document.getElementById("euroMap");
-        c.drawImage(euroMap, 0, 0);
+        // store the index of active country into this variable
+        let activeCountry = -1;
             
-        // draw borders of 'active country'
+        // draw borders and color all countries blue first
         for(var i = 0; i < countryList.length; i++) {
 
-        // check for special cases (dependencies, separate territories)
-        if (
-            i === 6 ||  // croatia
-            i === 7 ||  // croatia - dubrovnik
-            i === 10 || // denmark
-            i === 11 || // denmark - zealand
-            i === 12 || // estonia
-            i === 13 || // estonia - hiiumaa
-            i === 14 || // estonia - saaremaa
-            i === 16 || // france
-            i === 17 || // france - corsica
-            i === 19 || // greece
-            i === 20 || // greece - crete
-            i === 21 || // greece - rodos
-            i === 25 || // italy
-            i === 26 || // italy - sardinia
-            i === 27 || // italy - sicily
-            i === 40 || // russia
-            i === 41 || // russia - kaliningrad
-            i === 42 || // Russia - Kolguyev island
-            i === 46 || // spain
-            i === 47 || // spain - ibiza
-            i === 48 || // spain - mallorca
-            i === 49 || // spain - menorca
-            i === 50 || // sweden
-            i === 51 || // sweden - gotland
-            i === 54 || // uk
-            i === 55 // uk - n.ireland
-            ) {
-                switch (i) {
-                    case 6:
-                        
-                        break;
-                
-                    default:
-                        break;
-                }
+            let temp = colorCountryBlue(countryList[i].countryVertices, i);
+
+            // catch the index of clicked-on country and save it in 'activeCountry'
+            if (temp > activeCountry) {
+                activeCountry = temp;
+            }
         }
 
-
-
-            //drawBorders(countryList[i].countryVertices);
+        // this is needed to avoid an error at start (activeCountry is equal to -1 before first click)
+        if (activeCountry >= 0) {
+            
+        // find active country and color it and it's dependencies red
+        if (activeCountry === 6 || activeCountry === 7) {
+            colorCountryRed(countryList[6].countryVertices);    // croatia
+            colorCountryRed(countryList[7].countryVertices);    // croatia - dubrovnik
         }
-        // reset flag to default value (false)
-        selectionMade = false;
+        else if (activeCountry === 10 || activeCountry === 11) {
+            colorCountryRed(countryList[10].countryVertices);   // denmark
+            colorCountryRed(countryList[11].countryVertices);   // denmark - zealand
+        }
+        else if (activeCountry === 12 || activeCountry === 13 || activeCountry === 14) {
+            colorCountryRed(countryList[12].countryVertices);   // estonia
+            colorCountryRed(countryList[13].countryVertices);   // estonia - hiiumaa
+            colorCountryRed(countryList[14].countryVertices);   // estonia - saaremaa
+        }
+        else if (activeCountry === 16 || activeCountry === 17) {
+            colorCountryRed(countryList[16].countryVertices);   // france
+            colorCountryRed(countryList[17].countryVertices);   // france - corsica
+        }
+        else if (activeCountry === 19 || activeCountry === 20 || activeCountry === 21) {
+            colorCountryRed(countryList[19].countryVertices);   // greece
+            colorCountryRed(countryList[20].countryVertices);   // greece - crete
+            colorCountryRed(countryList[21].countryVertices);   // greece - rodos
+        }
+        else if (activeCountry === 25 || activeCountry === 26 || activeCountry === 27) {
+            colorCountryRed(countryList[25].countryVertices);   // italy
+            colorCountryRed(countryList[26].countryVertices);   // italy - sardinia
+            colorCountryRed(countryList[27].countryVertices);   // italy - sicily
+        }
+        else if (activeCountry === 40 || activeCountry === 41 || activeCountry === 42) {
+            colorCountryRed(countryList[40].countryVertices);   // russia
+            colorCountryRed(countryList[41].countryVertices);   // russia - kaliningrad
+            colorCountryRed(countryList[42].countryVertices);   // Russia - Kolguyev island
+        }
+        else if (activeCountry === 46 || activeCountry === 47 || activeCountry === 48 || activeCountry === 49) {
+            colorCountryRed(countryList[46].countryVertices);   // spain
+            colorCountryRed(countryList[47].countryVertices);   // spain - ibiza
+            colorCountryRed(countryList[48].countryVertices);   // spain - mallorca
+            colorCountryRed(countryList[49].countryVertices);   // spain - menorca
+        }
+        else if (activeCountry === 50 || activeCountry === 51) {
+            colorCountryRed(countryList[50].countryVertices);   // sweden
+            colorCountryRed(countryList[51].countryVertices);   // sweden - gotland
+        }
+        else if (activeCountry === 54 || activeCountry === 55) {
+            colorCountryRed(countryList[54].countryVertices);   // uk
+            colorCountryRed(countryList[55].countryVertices);   // uk - n.ireland
+        }
+        else
+            colorCountryRed(countryList[activeCountry].countryVertices);    // any other country
+        }
     }
 
     // draw all countries for the first time
     drawAllCountries();
-    // draw again whenever we click (this can't be with the other event listeners because then 'drawAllCountries' is undefined)
+    // draw again whenever we click
     myCanvas.addEventListener("click", drawAllCountries);
 }
-
-
-// event listeners (filling helper fields with coords)
-
-myCanvas.addEventListener('mousemove', function (e) {
-
-    // coords.innerText = "c.lineTo(" + (e.clientX - 8) + ", " + (e.clientY - 8) + ");";
-    coords.innerText = "{x:" + (e.clientX - 8) + ", y:" + (e.clientY - 8) + "},";
-});
-
-myCanvas.addEventListener('click', function (e) {
-
-    // coords.innerText = "c.lineTo(" + (e.clientX - 8) + ", " + (e.clientY - 8) + ");";
-    copy.textContent += "{x:" + (e.clientX - 8) + ", y:" + (e.clientY - 8) + "},\n";
-});
