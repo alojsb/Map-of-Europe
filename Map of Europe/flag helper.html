@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>flag helper</title>
+    <script src="countries.js"></script>
+    <style>
+
+        #myCanvas{
+            border: 1px solid green;
+        }
+
+        img{
+            display: none;
+        }
+
+        #coords{
+            position: fixed;
+            bottom: 10px;
+            left: 10px;
+            width: 200px;
+            height: 24px;
+            border: 1px solid red;
+            color: mintcream;
+            background-color: navy;
+        }
+
+        #copy-paste-window{
+            position: fixed;
+            bottom: 48px;
+            left: 10px;
+            width: 200px;
+            border: 1px solid green;
+        }
+
+    </style>
+</head>
+<body>
+
+        <canvas id="myCanvas" width="1776" height="1234">
+            <!-- Only shown when the browser does not support the canvas tag -->
+            Your browser does not support the 'canvas' feature.
+        </canvas>
+
+        <img id="flags" width="1776" height="1234" src="47-flags.jpg" alt="flags of europe">
+
+        <!-- helper fields for display of cursor coords and copy-paste-ready list of list of coords -->
+        <div id="coords"></div>
+        <!-- <div id="copy-paste-window" onfocus="this.select()"></div> -->
+        <textarea name="abc" id="copy-paste-window" cols="30" rows="10" onfocus="this.select()"></textarea>
+
+
+    <script>
+
+        // canvas basic settings
+        let myCanvas = document.getElementById("myCanvas");
+        let c = myCanvas.getContext("2d");
+
+        // helper windows with information on click coordinates
+        let coords = document.getElementById("coords");
+        let copy = document.getElementById("copy-paste-window");
+
+        window.onload = function () {
+            
+            // load image
+            let flags = document.getElementById("flags");
+            c.drawImage(flags, 0, 0);
+        }
+
+        
+
+
+        // event listeners (filling helper fields with coords)
+
+        myCanvas.addEventListener('mousemove', function (e) {
+
+            // coords.innerText = "c.lineTo(" + (e.clientX - 8) + ", " + (e.clientY - 8) + ");";
+            coords.innerText = "{x:" + (e.clientX - 8) + ", y:" + (e.clientY - 8) + "},";
+        });
+
+        myCanvas.addEventListener('click', function (e) {
+
+            // coords.innerText = "c.lineTo(" + (e.clientX - 8) + ", " + (e.clientY - 8) + ");";
+            copy.textContent += "{x:" + (e.clientX - 8) + ", y:" + (e.clientY - 8) + "},\n";
+        });
+
+    </script>
+    
+
+</body>
+</html>

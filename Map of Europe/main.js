@@ -6,9 +6,26 @@ let c = myCanvas.getContext("2d");
 let coords = document.getElementById("coords");
 let copy = document.getElementById("copy-paste-window");
 
-// declaration of fundamental variables
+// declaration of fundamental variables for the map
 let countryVertices;        // array of vertices of the active country being drawn (undefined at first)
 let x, y;                   // placeholders for click coordinates (undefined until clicked first)
+
+// catch relevant elements in the country stats display
+let cName = document.getElementById("country-name");
+let oName = document.getElementById("official-name");
+let cap = document.getElementById("capital");
+let area = document.getElementById("area");
+let pop = document.getElementById("population");
+let doi = document.getElementById("independence");
+let GDPnom = document.getElementById("GDPnom");
+let GDPnomPC = document.getElementById("GDPnomPerCapita");
+let GDPppp = document.getElementById("GDPppp");
+let GDPpppPC = document.getElementById("GDPpppPerCapita");
+let HDI = document.getElementById("HDI");
+let curr = document.getElementById("currency");
+let CC = document.getElementById("CC");
+let ICC = document.getElementById("ICC");
+let ccTLD = document.getElementById("ccTLD");
 
 // needs to execute this only after whole document is rendered
 window.onload = function () {
@@ -68,8 +85,10 @@ window.onload = function () {
 
         // pinpoint user click coordinates (e is undefined before first click)
         if (e) {
-            x = e.clientX - 8;
-            y = e.clientY - 8;
+            // the offset part makes the page work as intended
+            // even if the canvas is moved for some reason (CSS, browser download bar etc.)
+            x = e.clientX - myCanvas.offsetLeft;
+            y = e.clientY - myCanvas.offsetTop;
         }
 
         // clear the canvas
@@ -91,57 +110,79 @@ window.onload = function () {
 
         // this is needed to avoid an error at start (activeCountry is equal to -1 before first click)
         if (activeCountry >= 0) {
+
+            presentCountryData(countryData[activeCountry]);
             
-        // find active country and color it and it's dependencies red
-        if (activeCountry === 6 || activeCountry === 7) {
-            colorCountryRed(countryList[6].countryVertices);    // croatia
-            colorCountryRed(countryList[7].countryVertices);    // croatia - dubrovnik
+            // find active country and color it and it's dependencies red
+            if (activeCountry === 6 || activeCountry === 7) {
+                colorCountryRed(countryList[6].countryVertices);    // croatia
+                colorCountryRed(countryList[7].countryVertices);    // croatia - dubrovnik
+            }
+            else if (activeCountry === 10 || activeCountry === 11) {
+                colorCountryRed(countryList[10].countryVertices);   // denmark
+                colorCountryRed(countryList[11].countryVertices);   // denmark - zealand
+            }
+            else if (activeCountry === 12 || activeCountry === 13 || activeCountry === 14) {
+                colorCountryRed(countryList[12].countryVertices);   // estonia
+                colorCountryRed(countryList[13].countryVertices);   // estonia - hiiumaa
+                colorCountryRed(countryList[14].countryVertices);   // estonia - saaremaa
+            }
+            else if (activeCountry === 16 || activeCountry === 17) {
+                colorCountryRed(countryList[16].countryVertices);   // france
+                colorCountryRed(countryList[17].countryVertices);   // france - corsica
+            }
+            else if (activeCountry === 19 || activeCountry === 20 || activeCountry === 21) {
+                colorCountryRed(countryList[19].countryVertices);   // greece
+                colorCountryRed(countryList[20].countryVertices);   // greece - crete
+                colorCountryRed(countryList[21].countryVertices);   // greece - rodos
+            }
+            else if (activeCountry === 25 || activeCountry === 26 || activeCountry === 27) {
+                colorCountryRed(countryList[25].countryVertices);   // italy
+                colorCountryRed(countryList[26].countryVertices);   // italy - sardinia
+                colorCountryRed(countryList[27].countryVertices);   // italy - sicily
+            }
+            else if (activeCountry === 40 || activeCountry === 41 || activeCountry === 42) {
+                colorCountryRed(countryList[40].countryVertices);   // russia
+                colorCountryRed(countryList[41].countryVertices);   // russia - kaliningrad
+                colorCountryRed(countryList[42].countryVertices);   // Russia - Kolguyev island
+            }
+            else if (activeCountry === 46 || activeCountry === 47 || activeCountry === 48 || activeCountry === 49) {
+                colorCountryRed(countryList[46].countryVertices);   // spain
+                colorCountryRed(countryList[47].countryVertices);   // spain - ibiza
+                colorCountryRed(countryList[48].countryVertices);   // spain - mallorca
+                colorCountryRed(countryList[49].countryVertices);   // spain - menorca
+            }
+            else if (activeCountry === 50 || activeCountry === 51) {
+                colorCountryRed(countryList[50].countryVertices);   // sweden
+                colorCountryRed(countryList[51].countryVertices);   // sweden - gotland
+            }
+            else if (activeCountry === 54 || activeCountry === 55) {
+                colorCountryRed(countryList[54].countryVertices);   // uk
+                colorCountryRed(countryList[55].countryVertices);   // uk - n.ireland
+            }
+            else
+                colorCountryRed(countryList[activeCountry].countryVertices);    // any other country
         }
-        else if (activeCountry === 10 || activeCountry === 11) {
-            colorCountryRed(countryList[10].countryVertices);   // denmark
-            colorCountryRed(countryList[11].countryVertices);   // denmark - zealand
-        }
-        else if (activeCountry === 12 || activeCountry === 13 || activeCountry === 14) {
-            colorCountryRed(countryList[12].countryVertices);   // estonia
-            colorCountryRed(countryList[13].countryVertices);   // estonia - hiiumaa
-            colorCountryRed(countryList[14].countryVertices);   // estonia - saaremaa
-        }
-        else if (activeCountry === 16 || activeCountry === 17) {
-            colorCountryRed(countryList[16].countryVertices);   // france
-            colorCountryRed(countryList[17].countryVertices);   // france - corsica
-        }
-        else if (activeCountry === 19 || activeCountry === 20 || activeCountry === 21) {
-            colorCountryRed(countryList[19].countryVertices);   // greece
-            colorCountryRed(countryList[20].countryVertices);   // greece - crete
-            colorCountryRed(countryList[21].countryVertices);   // greece - rodos
-        }
-        else if (activeCountry === 25 || activeCountry === 26 || activeCountry === 27) {
-            colorCountryRed(countryList[25].countryVertices);   // italy
-            colorCountryRed(countryList[26].countryVertices);   // italy - sardinia
-            colorCountryRed(countryList[27].countryVertices);   // italy - sicily
-        }
-        else if (activeCountry === 40 || activeCountry === 41 || activeCountry === 42) {
-            colorCountryRed(countryList[40].countryVertices);   // russia
-            colorCountryRed(countryList[41].countryVertices);   // russia - kaliningrad
-            colorCountryRed(countryList[42].countryVertices);   // Russia - Kolguyev island
-        }
-        else if (activeCountry === 46 || activeCountry === 47 || activeCountry === 48 || activeCountry === 49) {
-            colorCountryRed(countryList[46].countryVertices);   // spain
-            colorCountryRed(countryList[47].countryVertices);   // spain - ibiza
-            colorCountryRed(countryList[48].countryVertices);   // spain - mallorca
-            colorCountryRed(countryList[49].countryVertices);   // spain - menorca
-        }
-        else if (activeCountry === 50 || activeCountry === 51) {
-            colorCountryRed(countryList[50].countryVertices);   // sweden
-            colorCountryRed(countryList[51].countryVertices);   // sweden - gotland
-        }
-        else if (activeCountry === 54 || activeCountry === 55) {
-            colorCountryRed(countryList[54].countryVertices);   // uk
-            colorCountryRed(countryList[55].countryVertices);   // uk - n.ireland
-        }
-        else
-            colorCountryRed(countryList[activeCountry].countryVertices);    // any other country
-        }
+    }
+
+    function presentCountryData(state) {
+        
+        console.log("writing out data for country " + state.name);
+        cName.innerText = state.name;
+        oName.innerText = state.officially;
+        cap.innerText = state.capital;
+        area.innerText = state.area.toLocaleString("de-DE") + " km\xB2";
+        pop.innerText = state.population.toLocaleString("de-DE");
+        doi.innerText = state.dateOfIndependence.toLocaleDateString("de-DE");
+        GDPnom.innerText = state.GDPnom + " bil. $";
+        GDPnomPC.innerText = "$" + state.GDPnomPerCapita.toLocaleString("de-DE");
+        GDPppp.innerText = state.GDPppp + " bil. $";
+        GDPpppPC.innerText = "$" + state.GDPpppPerCapita.toLocaleString("de-DE");
+        HDI.innerText = state.HDI;
+        curr.innerText = state.currency;
+        CC.innerText = state.callingCode;
+        ICC.innerText = state.interCarCode;
+        ccTLD.innerText = state.internetccTDL;
     }
 
     // draw all countries for the first time

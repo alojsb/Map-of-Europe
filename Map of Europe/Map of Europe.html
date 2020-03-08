@@ -6,49 +6,177 @@
     <title>Map of Europe</title>
 
     <script src="countries.js"></script>
+    <script src="countryStats.js"></script>
     <style>
+
+        body{
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        div{
+            border: 1px solid mediumpurple;
+        }
+
+        #container{
+            display: flex;
+            flex-direction: row-reverse;
+        }
 
         #myCanvas{
             border: 1px solid green;
             background-color: rgb(203, 243, 243);
         }
 
-        img{
-            display: none;
+        #presenter{
+            flex-grow: 1;
         }
 
-        #coords{
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            width: 200px;
-            height: 24px;
-            border: 1px solid red;
+        .row{
+            display: flex;
         }
 
-        #copy-paste-window{
-            position: absolute;
-            top: 48px;
-            right: 10px;
-            width: 200px;
-            border: 1px solid green;
+        .row-item{
+            /*flex-grow: 1;*/
+            flex-basis: 50%;
+            padding: 4px;
         }
+
+        .row-item:nth-child(1){
+            text-align: end;
+        }
+
+        #title-row-item{
+            text-align: center;
+            font-size: 48px;
+        }
+
+        #countryFlagAndName{
+            font-size: 24px;
+        }
+
+        .categoryTitle{
+            text-align: center;
+            padding: 8px 8px 4px;
+        }
+
+        #flag {
+    background-image: url(47-flags.jpg);
+    background-position: 100px 91px; /* Visible coordinates in image */
+    height: 30px; /* Visible height */
+    width: 60px; /* Visible width */
+}
 
     </style>
 </head>
 <body>
 
+    <div id="container">
         <canvas id="myCanvas" width="940" height="768">
             <!-- Only shown when the browser does not support the canvas tag -->
             Your browser does not support the 'canvas' feature.
         </canvas>
+    
+        <div id="presenter">
 
-        <img id="euroMap" width="1024" height="768" src="Europe_map_resized.png" alt="Map of Europe">
+            <div id="title">
+                <div id="title-row-item" class="row-item">Map of Europe</div>
+
+            </div>
+
+            <div id="countryFlagAndName" class="row">
+                <div id="flag" class="row-item"></div>
+                <div id="country-name" class="row-item">Country name</div>
+            </div>
+
+            <div class="row">
+                <div id="label-official-name" class="row-item">Official name</div>
+                <div id="official-name" class="row-item">Official Country name</div>
+            </div>
+
+            <div class="row">
+                <div id="label-capital" class="row-item">Capital</div>
+                <div id="capital" class="row-item">Capital name</div>
+            </div>
+
+            <div class="row">
+                <div id="label-area" class="row-item">Area</div>
+                <div id="area" class="row-item">Number</div>
+            </div>
+
+            <div class="row">
+                <div id="label-population" class="row-item">Population</div>
+                <div id="population" class="row-item">Number</div>
+            </div>
+
+            <div class="row">
+                <div id="label-date-of-independence" class="row-item">Date of independence</div>
+                <div id="independence" class="row-item">dd.mm.yyyy</div>
+            </div>
+
+            <div id="economic">
+                <div id="label-economic" class="categoryTitle">Economic Performance</div>
+
+            </div>
+
+            <div class="row">
+                <div id="label-GDPnom" class="row-item">GDP (nominal)</div>
+                <div id="GDPnom" class="row-item">Number</div>
+            </div>
+
+            <div class="row">
+                <div id="label-GDPnomPerCapita" class="row-item">GDP (nominal) per capita</div>
+                <div id="GDPnomPerCapita" class="row-item">Number</div>
+            </div>
+
+            <div id="livingSt">
+                <div id="label-livingSt" class="categoryTitle">Living Standards</div>
+            </div>
+
+            <div class="row">
+                <div id="label-GDPppp" class="row-item">GDP (PPP)</div>
+                <div id="GDPppp" class="row-item">Number</div>
+            </div>
+
+            <div class="row">
+                <div id="label-GDPpppPerCapita" class="row-item">GDP (PPP) per capita</div>
+                <div id="GDPpppPerCapita" class="row-item">Number</div>
+            </div>
+
+            <div class="row">
+                <div id="label-HDI" class="row-item">Human Development Index (HDI)</div>
+                <div id="HDI" class="row-item">Number</div>
+            </div>
+
+            <div id="other">
+                <div id="label-other" class="categoryTitle">Other</div>
+            </div>
+
+            <div class="row">
+                <div id="label-currency" class="row-item">Currency</div>
+                <div id="currency" class="row-item">Currency denomination</div>
+            </div>
+
+            <div class="row">
+                <div id="label-CC" class="row-item">Calling Code</div>
+                <div id="CC" class="row-item">Number</div>
+            </div>
+
+            <div class="row">
+                <div id="label-ICC" class="row-item">International Car Code</div>
+                <div id="ICC" class="row-item">Code</div>
+            </div>
+
+            <div class="row">
+                <div id="label-ccTLD" class="row-item">Internet ccTLD</div>
+                <div id="ccTLD" class="row-item">Code</div>
+            </div>
+
+        </div>
+    </div>
 
 
-
-        <!-- This script tag has to be here (and not in the head tag) because the relevant html elements have to be loaded -->
-        <script src="main.js"></script>
+    <!-- This script tag has to be here (and not in the head tag) because the relevant html elements have to be loaded -->
+    <script src="main.js"></script>
 
 </body>
 </html>
