@@ -2073,4 +2073,71 @@ countryVertices:
         {x:174, y:329},
         {x:172, y:318}
     ]
-}];
+},
+{
+    name: "Andorra",
+    countryVertices:
+    [
+        // 211 581 central coords of city-state icon
+        {x:207, y:581},
+        {x:211, y:577},
+        {x:215, y:581},
+        {x:211, y:585}
+    ]
+},
+{
+    name: "Liechtenstein",
+    countryVertices:
+    [
+        // 337 509 central coords of city-state icon
+        {x:333, y:509},
+        {x:337, y:505},
+        {x:341, y:509},
+        {x:337, y:513}
+    ]
+},
+{
+    name: "Malta",
+    countryVertices:
+    [
+        // 397 736 central coords of city-state icon
+        {x:393, y:736},
+        {x:397, y:732},
+        {x:401, y:736},
+        {x:397, y:740}
+    ]
+},
+{
+    name: "Monaco",
+    countryVertices:
+    [
+        // 292 574 central coords of city-state icon
+        {x:288, y:574},
+        {x:292, y:570},
+        {x:296, y:574},
+        {x:292, y:578}
+    ]
+},
+{
+    name: "San Marino",
+    countryVertices:
+    [
+        // 370 573 central coords of city-state icon
+        {x:366, y:573},
+        {x:370, y:569},
+        {x:374, y:573},
+        {x:370, y:577}
+    ]
+},
+{
+    name: "Vatican City",
+    countryVertices:
+    [
+        // 373 615 central coords of city-state icon
+        {x:369, y:615},
+        {x:373, y:611},
+        {x:377, y:615},
+        {x:373, y:619}
+    ]
+}
+];
