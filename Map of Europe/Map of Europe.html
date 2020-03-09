@@ -13,18 +13,14 @@
             font-family: Arial, Helvetica, sans-serif;
         }
 
-        div{
-            border: 1px solid mediumpurple;
-        }
-
         #container{
             display: flex;
             flex-direction: row-reverse;
         }
 
         #myCanvas{
-            border: 1px solid green;
-            background-color: rgb(203, 243, 243);
+            /* border: 1px solid green; */
+            /* background-color: rgb(203, 243, 243); */
         }
 
         #presenter{
@@ -48,23 +44,49 @@
         #title-row-item{
             text-align: center;
             font-size: 48px;
+            /* background-color: rgb(193, 238, 240); */
+            background-color: rgb(113, 222, 226);
+            color: aliceblue;
         }
 
         #countryFlagAndName{
             font-size: 24px;
         }
 
+        #flag-container{
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        #country-name{
+            display: flex;
+            align-items: center;
+        }
+
+        .label{
+            color: rgb(117, 117, 117);
+        }
+
         .categoryTitle{
             text-align: center;
             padding: 8px 8px 4px;
+            font-weight: bolder;
+            background-color: rgb(113, 222, 226);
+            color: aliceblue;
         }
 
         #flag {
-    background-image: url(47-flags.jpg);
-    background-position: 100px 91px; /* Visible coordinates in image */
-    height: 30px; /* Visible height */
-    width: 60px; /* Visible width */
-}
+            width: 150px;
+            height: 95px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        img{
+            position: absolute;
+            top: -252px;
+            left: -302px;
+        }
 
     </style>
 </head>
@@ -84,32 +106,38 @@
             </div>
 
             <div id="countryFlagAndName" class="row">
-                <div id="flag" class="row-item"></div>
-                <div id="country-name" class="row-item">Country name</div>
+                <div id="flag-container" class="row-item">
+                    <div id="flag" class="">
+                        <img id="image" src="47-flags.jpg" alt="flags of europe">
+                    </div>
+                </div>
+                <div id="country-name" class="row-item">
+                    <div>Country name</div>
+                </div>
             </div>
 
             <div class="row">
-                <div id="label-official-name" class="row-item">Official name</div>
+                <div id="label-official-name" class="row-item label">Official name</div>
                 <div id="official-name" class="row-item">Official Country name</div>
             </div>
 
             <div class="row">
-                <div id="label-capital" class="row-item">Capital</div>
+                <div id="label-capital" class="row-item label">Capital</div>
                 <div id="capital" class="row-item">Capital name</div>
             </div>
 
             <div class="row">
-                <div id="label-area" class="row-item">Area</div>
+                <div id="label-area" class="row-item label">Area</div>
                 <div id="area" class="row-item">Number</div>
             </div>
 
             <div class="row">
-                <div id="label-population" class="row-item">Population</div>
+                <div id="label-population" class="row-item label">Population</div>
                 <div id="population" class="row-item">Number</div>
             </div>
 
             <div class="row">
-                <div id="label-date-of-independence" class="row-item">Date of independence</div>
+                <div id="label-date-of-independence" class="row-item label">Date of independence</div>
                 <div id="independence" class="row-item">dd.mm.yyyy</div>
             </div>
 
@@ -119,12 +147,12 @@
             </div>
 
             <div class="row">
-                <div id="label-GDPnom" class="row-item">GDP (nominal)</div>
+                <div id="label-GDPnom" class="row-item label">GDP (nominal)</div>
                 <div id="GDPnom" class="row-item">Number</div>
             </div>
 
             <div class="row">
-                <div id="label-GDPnomPerCapita" class="row-item">GDP (nominal) per capita</div>
+                <div id="label-GDPnomPerCapita" class="row-item label">GDP (nominal) per capita</div>
                 <div id="GDPnomPerCapita" class="row-item">Number</div>
             </div>
 
@@ -133,17 +161,17 @@
             </div>
 
             <div class="row">
-                <div id="label-GDPppp" class="row-item">GDP (PPP)</div>
+                <div id="label-GDPppp" class="row-item label">GDP (PPP)</div>
                 <div id="GDPppp" class="row-item">Number</div>
             </div>
 
             <div class="row">
-                <div id="label-GDPpppPerCapita" class="row-item">GDP (PPP) per capita</div>
+                <div id="label-GDPpppPerCapita" class="row-item label">GDP (PPP) per capita</div>
                 <div id="GDPpppPerCapita" class="row-item">Number</div>
             </div>
 
             <div class="row">
-                <div id="label-HDI" class="row-item">Human Development Index (HDI)</div>
+                <div id="label-HDI" class="row-item label">Human Development Index (HDI)</div>
                 <div id="HDI" class="row-item">Number</div>
             </div>
 
@@ -152,22 +180,22 @@
             </div>
 
             <div class="row">
-                <div id="label-currency" class="row-item">Currency</div>
+                <div id="label-currency" class="row-item label">Currency</div>
                 <div id="currency" class="row-item">Currency denomination</div>
             </div>
 
             <div class="row">
-                <div id="label-CC" class="row-item">Calling Code</div>
+                <div id="label-CC" class="row-item label">Calling Code</div>
                 <div id="CC" class="row-item">Number</div>
             </div>
 
             <div class="row">
-                <div id="label-ICC" class="row-item">International Car Code</div>
+                <div id="label-ICC" class="row-item label">International Car Code</div>
                 <div id="ICC" class="row-item">Code</div>
             </div>
 
             <div class="row">
-                <div id="label-ccTLD" class="row-item">Internet ccTLD</div>
+                <div id="label-ccTLD" class="row-item label">Internet ccTLD</div>
                 <div id="ccTLD" class="row-item">Code</div>
             </div>
 
