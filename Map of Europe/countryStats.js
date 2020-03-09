@@ -16,6 +16,11 @@ let countryData = [{
     currency: "ALB",
     callingCode: "+666",
     interCarCode: "AL",
-    internetccTDL: ".al"
+    internetccTDL: ".al",
+    flagCoords:
+    [
+        {x:180, y:89},
+        {x:329, y:184}
+    ]
 }
 ]
