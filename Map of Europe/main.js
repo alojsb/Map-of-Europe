@@ -27,6 +27,10 @@ let CC = document.getElementById("CC");
 let ICC = document.getElementById("ICC");
 let ccTLD = document.getElementById("ccTLD");
 
+// flag-related elements
+let flag = document.getElementById("flag");
+let image = document.getElementById("image");
+
 // needs to execute this only after whole document is rendered
 window.onload = function () {
 
@@ -183,6 +187,19 @@ window.onload = function () {
         CC.innerText = state.callingCode;
         ICC.innerText = state.interCarCode;
         ccTLD.innerText = state.internetccTDL;
+
+        showFlag(state.flagCoords);
+    }
+
+    function showFlag(coordinates) {
+
+        flag.style.width = coordinates[1].x - coordinates[0].x + "px";
+        flag.style.height = coordinates[1].y - coordinates[0].y + "px";
+        //console.log(flag.style.width + ", " + flag.style.height);
+        image.style.left = coordinates[0].x + "px";
+        image.style.top = coordinates[0].y + "px";
+        console.log(coordinates[0].x + ", " + coordinates[0].y);
+        console.log(image.style.left + ", " + image.style.top);
     }
 
     // draw all countries for the first time
