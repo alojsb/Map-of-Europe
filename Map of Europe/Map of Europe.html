@@ -4,162 +4,212 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Map of Europe</title>
-    <script src="countryBorders.js"></script>
+
+    <script src="countries.js"></script>
+    <script src="countryStats.js"></script>
     <style>
 
+        body{
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        #container{
+            display: flex;
+            flex-direction: row-reverse;
+        }
+
         #myCanvas{
-            border: 1px solid green;
+            /* border: 1px solid green; */
+            /* background-color: rgb(203, 243, 243); */
+        }
+
+        #presenter{
+            flex-grow: 1;
+        }
+
+        .row{
+            display: flex;
+        }
+
+        .row-item{
+            /*flex-grow: 1;*/
+            flex-basis: 50%;
+            padding: 4px;
+        }
+
+        .row-item:nth-child(1){
+            text-align: end;
+        }
+
+        #title-row-item{
+            text-align: center;
+            font-size: 48px;
+            /* background-color: rgb(193, 238, 240); */
+            background-color: rgb(113, 222, 226);
+            color: aliceblue;
+        }
+
+        #countryFlagAndName{
+            font-size: 24px;
+        }
+
+        #flag-container{
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        #country-name{
+            display: flex;
+            align-items: center;
+        }
+
+        .label{
+            color: rgb(117, 117, 117);
+        }
+
+        .categoryTitle{
+            text-align: center;
+            padding: 8px 8px 4px;
+            font-weight: bolder;
+            background-color: rgb(113, 222, 226);
+            color: aliceblue;
+        }
+
+        #flag {
+            width: 150px;
+            height: 95px;
+            position: relative;
+            overflow: hidden;
         }
 
         img{
-            display: none;
-        }
-
-        #coords{
             position: absolute;
-            top: 10px;
-            right: 10px;
-            width: 200px;
-            height: 24px;
-            border: 1px solid red;
-        }
-
-        #copy-paste-window{
-            position: absolute;
-            top: 48px;
-            right: 10px;
-            width: 200px;
-            border: 1px solid green;
+            top: -252px;
+            left: -302px;
         }
 
     </style>
 </head>
 <body>
 
-            <canvas id="myCanvas" width="1024" height="768">
-                <!-- Only shown when the browser does not support the canvas tag -->
-                Your browser does not support the 'canvas' feature.
-            </canvas>
-
-        <img id="euroMap" width="1024" height="768" src="Europe_map_resized.png" alt="Map of Europe">
-
-
-            <div id="coords"></div>
-            <div id="copy-paste-window"></div>
-
-
-    <script>
-
-        // canvas basic settings
-        let myCanvas = document.getElementById("myCanvas");
-        let c = myCanvas.getContext("2d");
-
-        // helper windows with information on click coordinates
-        let coords = document.getElementById("coords");
-        let copy = document.getElementById("copy-paste-window");
-
-        // declaration of fundamental variables
-        let countryVertices;    // array of vertices of the active country being drawn (undefined at first)
-        let x, y;               // placeholders for click coordinates (undefined until clicked first)
-
-        // needs to execute this only after whole document is rendered
-        window.onload = function () {
-
-            // list of countries
-            let countryList =
-            [
-                "France",
-                "Iceland",
-                "Ireland",
-                "Portugal",
-                "Spain",
-                "United Kingdom",
-                "United Kingdom - N.Ireland"
-            ]
-
-            // draw the whole border of a single country
-            function drawBorders(s) {
-
-                c.beginPath();
-                c.moveTo(s[0].x, s[0].y);
-
-                for(var i = 1; i < s.length; i++){
-
-                    c.lineTo(s[i].x, s[i].y);
-                }
-
-                c.closePath();
-                c.strokeStyle = c.isPointInPath(x, y) ? "red" : "blue";
-                c.stroke();
-            }
-
-            // draw borders of all countries
-            function drawAllCountries(e) {
-
-                // pinpoint user click coordinates (e is undefined before first click)
-                if (e) {
-                    x = e.clientX - 8;
-                    y = e.clientY - 8;
-                }
-
-                // clear the canvas
-                c.clearRect(0, 0, myCanvas.width, myCanvas.height);
-
-                // catch the background image
-                let euroMap = document.getElementById("euroMap");
-                c.drawImage(euroMap, 0, 0);
-                    
-                // draw borders of 'active country'
-                for(var i = 0; i < countryList.length; i++) {
-
-                    if (countryList[i] === "France") {
-                        countryVertices = franceVertices;
-                    }
-                    if (countryList[i] === "Iceland") {
-                        countryVertices = icelandVertices;
-                    }
-                    if (countryList[i] === "Ireland") {
-                        countryVertices = irelandVertices;
-                    }
-                    if (countryList[i] === "Portugal") {
-                        countryVertices = portugalVertices;
-                    }
-                    if (countryList[i] === "Spain") {
-                        countryVertices = spainVertices;
-                    }
-                    if (countryList[i] === "United Kingdom") {
-                        countryVertices = unitedKingdom;
-                    }
-                    if (countryList[i] === "United Kingdom - N.Ireland") {
-                        countryVertices = unitedKingdom2;
-                    }
-                    drawBorders(countryVertices);
-                }
-            }
-
-            // draw all countries for the first time
-            drawAllCountries();
-            // draw again whenever we click (this can't be with the other event listeners because then 'drawAllCountries' is undefined)
-            myCanvas.addEventListener("click", drawAllCountries);
-        }
-
-
-        // event listeners
-
-        myCanvas.addEventListener('mousemove', function (e) {
-
-            // coords.innerText = "c.lineTo(" + (e.clientX - 8) + ", " + (e.clientY - 8) + ");";
-            coords.innerText = "{x:" + (e.clientX - 8) + ", y:" + (e.clientY - 8) + "},";
-        });
-
-        myCanvas.addEventListener('click', function (e) {
-
-            // coords.innerText = "c.lineTo(" + (e.clientX - 8) + ", " + (e.clientY - 8) + ");";
-            copy.innerText += "{x:" + (e.clientX - 8) + ", y:" + (e.clientY - 8) + "},\n";
-        });
-
-    </script>
+    <div id="container">
+        <canvas id="myCanvas" width="940" height="768">
+            <!-- Only shown when the browser does not support the canvas tag -->
+            Your browser does not support the 'canvas' feature.
+        </canvas>
     
+        <div id="presenter">
+
+            <div id="title">
+                <div id="title-row-item" class="row-item">Map of Europe</div>
+
+            </div>
+
+            <div id="countryFlagAndName" class="row">
+                <div id="flag-container" class="row-item">
+                    <div id="flag" class="">
+                        <img id="image" src="flags.jpg" width="5024" height="3757" alt="flags of europe">
+                    </div>
+                </div>
+                <div id="country-name" class="row-item">
+                    <div>Country name</div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div id="label-official-name" class="row-item label">Official name</div>
+                <div id="official-name" class="row-item">Official Country name</div>
+            </div>
+
+            <div class="row">
+                <div id="label-capital" class="row-item label">Capital</div>
+                <div id="capital" class="row-item">Capital name</div>
+            </div>
+
+            <div class="row">
+                <div id="label-area" class="row-item label">Area</div>
+                <div id="area" class="row-item">Number</div>
+            </div>
+
+            <div class="row">
+                <div id="label-population" class="row-item label">Population</div>
+                <div id="population" class="row-item">Number</div>
+            </div>
+
+            <div class="row">
+                <div id="label-date-of-independence" class="row-item label">Date of independence</div>
+                <div id="independence" class="row-item">dd.mm.yyyy</div>
+            </div>
+
+            <div id="economic">
+                <div id="label-economic" class="categoryTitle">Economic Performance</div>
+
+            </div>
+
+            <div class="row">
+                <div id="label-GDPnom" class="row-item label">GDP (nominal)</div>
+                <div id="GDPnom" class="row-item">Number</div>
+            </div>
+
+            <div class="row">
+                <div id="label-GDPnomPerCapita" class="row-item label">GDP (nominal) per capita</div>
+                <div id="GDPnomPerCapita" class="row-item">Number</div>
+            </div>
+
+            <div id="livingSt">
+                <div id="label-livingSt" class="categoryTitle">Living Standards</div>
+            </div>
+
+            <div class="row">
+                <div id="label-GDPppp" class="row-item label">GDP (PPP)</div>
+                <div id="GDPppp" class="row-item">Number</div>
+            </div>
+
+            <div class="row">
+                <div id="label-GDPpppPerCapita" class="row-item label">GDP (PPP) per capita</div>
+                <div id="GDPpppPerCapita" class="row-item">Number</div>
+            </div>
+
+            <div class="row">
+                <div id="label-GDPpppCompare" class="row-item label">Compared to World PPP</div>
+                <div id="GDPpppCompare" class="row-item">Number</div>
+            </div>
+
+            <div class="row">
+                <div id="label-HDI" class="row-item label">Human Development Index (HDI)</div>
+                <div id="HDI" class="row-item">Number</div>
+            </div>
+
+            <div id="other">
+                <div id="label-other" class="categoryTitle">Other</div>
+            </div>
+
+            <div class="row">
+                <div id="label-currency" class="row-item label">Currency</div>
+                <div id="currency" class="row-item">Currency denomination</div>
+            </div>
+
+            <div class="row">
+                <div id="label-CC" class="row-item label">Calling Code</div>
+                <div id="CC" class="row-item">Number</div>
+            </div>
+
+            <div class="row">
+                <div id="label-ICC" class="row-item label">International Car Code</div>
+                <div id="ICC" class="row-item">Code</div>
+            </div>
+
+            <div class="row">
+                <div id="label-ccTLD" class="row-item label">Internet ccTLD</div>
+                <div id="ccTLD" class="row-item">Code</div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- This script tag has to be here (and not in the head tag) because the relevant html elements have to be loaded -->
+    <script src="main.js"></script>
 
 </body>
 </html>
